@@ -1,67 +1,56 @@
-# 🎵 ScreenSound
+# ScreenSound
 
-![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)
-![Hibernate](https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=hibernate&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![Java 17](https://img.shields.io/badge/Java-17-ED8B00?logo=openjdk&logoColor=white)
+![Spring Boot 4](https://img.shields.io/badge/Spring_Boot-4-6DB33F?logo=springboot&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-## 📌 Sobre o Projeto
+A command-line music catalog: register artists and their songs in PostgreSQL, search songs by artist and fetch each artist's biography from the Wikipedia API.
 
-O **ScreenSound** é uma aplicação de linha de comando (CLI) desenvolvida em Java, para cadastrar artistas e músicas em um catálogo persistido em banco de dados.
+## Features
 
-Neste projeto, construí um **CRUD completo via terminal** usando Spring Data JPA para a persistência dos dados, com relacionamento bidirecional entre artistas e músicas, além de integração com uma **API externa** (Wikipedia) para buscar biografias resumidas dos artistas cadastrados diretamente no terminal.
+- **Register artists** with a name and type (`SOLO`, `DUO` or `BAND`)
+- **Register songs** with title and album, linked to an existing artist
+- **List all songs**, grouped by artist
+- **Search songs by artist** — case-insensitive, matching part of the name
+- **Artist biography** — fetches the artist's summary from the Wikipedia REST API in real time
 
-## ⚙️ Funcionalidades
+## How it works
 
-- **Cadastro de artistas:** registro com nome e tipo (`SOLO`, `DUO`, `BAND`).
-- **Cadastro de músicas:** associação de músicas a um artista já cadastrado, com título e álbum.
-- **Listagem de músicas:** exibição de todas as músicas registradas, agrupadas por artista.
-- **Busca por artista:** consulta de músicas filtrando pelo nome do artista, via *query* JPQL customizada.
-- **Biografia via Wikipedia:** busca o resumo biográfico do artista consultando a API REST da Wikipedia em tempo real.
+- `Artist` and `Song` are JPA entities with a bidirectional one-to-many relationship (`@OneToMany` / `@ManyToOne`), and saving an artist cascades to its songs.
+- The search by artist is a custom JPQL query in `ArtistRepository` using `LOWER(...) LIKE` for partial, case-insensitive matches.
+- `WikipediaQueryService` calls `https://en.wikipedia.org/api/rest_v1/page/summary/{name}` with Java's native `HttpClient`.
 
-## 🛠️ Tecnologias Utilizadas
+## Tech stack
 
-- Java 17
-- Spring Boot
-- Spring Data JPA
-- Hibernate
-- PostgreSQL
-- Java HttpClient (consumo nativo da API da Wikipedia)
-- Maven
+Java 17 · Spring Boot 4 (Spring Data JPA, command-line runner) · Hibernate · PostgreSQL · Java `HttpClient` · Maven
 
-## 🚀 Como Executar o Projeto
+## Running
 
-### Pré-requisitos
+Requirements: Java 17+ and a running PostgreSQL server.
 
-- Java 17 ou superior
-- Maven
-- PostgreSQL em execução
-
-### Passo a passo
-
-1. Clone este repositório:
-   ```bash
-   git clone https://github.com/jg-abreu/desafio-alura-screensound-java.git
+1. Create the database:
+   ```sql
+   CREATE DATABASE screensound_db;
    ```
+   The tables are created by Hibernate on startup (`ddl-auto=update`).
 
-2. Navegue até a pasta do projeto:
+2. Set the connection through environment variables (the defaults are shown in parentheses):
+
+   | Variable | Default |
+   |---|---|
+   | `DB_HOST` | `localhost:5432` |
+   | `DB_USER` | `postgres` |
+   | `DB_PASSWORD` | `postgres` |
+
+3. Run the app:
    ```bash
-   cd desafio-alura-screensound-java
-   ```
-
-3. Configure o banco de dados em `src/main/resources/application.properties`:
-   ```properties
-   spring.datasource.url=jdbc:postgresql://localhost:5432/screensound_db
-   spring.datasource.username=postgres
-   spring.datasource.password=sua_senha_aqui
-   ```
-
-4. Execute a aplicação:
-   ```bash
+   git clone https://github.com/jg-abreu/screensound-java.git
+   cd screensound-java
    ./mvnw spring-boot:run
    ```
 
-5. Use o menu exibido no terminal para cadastrar artistas, cadastrar músicas, listar, buscar por artista e consultar biografias:
+4. Use the menu in the terminal:
    ```
    *** Screen Sound Music ***
 
@@ -74,9 +63,26 @@ Neste projeto, construí um **CRUD completo via terminal** usando Spring Data JP
    9 - Exit
    ```
 
-## 👨‍💻 Autor
+## Project structure
 
-**João Abreu**
-Desenvolvedor Backend Java | Spring Boot | PostgreSQL | API REST
+```
+src/main/java/br/com/alura/screensound
+├── main/         interactive menu
+├── model/        Artist, Song and ArtistType
+├── repository/   Spring Data repository with the JPQL query
+└── service/      Wikipedia API client
+```
 
-[🔗 LinkedIn](https://linkedin.com/in/SEU-USUARIO) · [🔗 GitHub](https://github.com/jg-abreu)
+## Credits
+
+Built as the solution to a challenge from [Alura](https://www.alura.com.br)'s Java and Spring Data JPA course. The implementation is my own.
+
+## License
+
+Released under the [MIT License](LICENSE).
+
+## Author
+
+**João Abreu** — back-end developer and Computer Science student in Rio de Janeiro, Brazil.
+
+[GitHub](https://github.com/jg-abreu) · [LinkedIn](https://www.linkedin.com/in/jo%C3%A3o-abreuuu) · jgabreudev@gmail.com
