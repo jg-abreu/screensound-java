@@ -3,7 +3,6 @@
 ![Java 17](https://img.shields.io/badge/Java-17-ED8B00?logo=openjdk&logoColor=white)
 ![Spring Boot 4](https://img.shields.io/badge/Spring_Boot-4-6DB33F?logo=springboot&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 A command-line music catalog: register artists and their songs in PostgreSQL, search songs by artist and fetch each artist's biography from the Wikipedia API.
 
@@ -76,10 +75,6 @@ src/main/java/br/com/alura/screensound
 ## Credits
 
 Built as the solution to a challenge from [Alura](https://www.alura.com.br)'s Java and Spring Data JPA course. The implementation is my own.
-
-## License
-
-Released under the [MIT License](LICENSE).
 
 ## Author
 
